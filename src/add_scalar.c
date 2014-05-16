@@ -38,8 +38,8 @@ void ed25519_add_scalar(unsigned char *public_key, unsigned char *private_key, c
         } else {
             /* unpack public key into T */
             ge_frombytes_negate_vartime(&public_key_unpacked, public_key);
-            fe_neg(public_key_unpacked.X, public_key_unpacked.X); // undo negate
-            fe_neg(public_key_unpacked.T, public_key_unpacked.T); // undo negate
+            fe_neg(public_key_unpacked.X, public_key_unpacked.X); /* undo negate */
+            fe_neg(public_key_unpacked.T, public_key_unpacked.T); /* undo negate */
             ge_p3_to_cached(&T, &public_key_unpacked);
 
             /* calculate n*B */

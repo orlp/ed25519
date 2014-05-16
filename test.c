@@ -3,16 +3,14 @@
 #include <string.h>
 #include <time.h>
 
-//#define ED25519_DLL
+/* #define ED25519_DLL */
 #include "src/ed25519.h"
 
 #include "src/ge.h"
 #include "src/sc.h"
 
-const char message[] = "Hello, world!";
 
-
-int main(int argc, char *argv[]) {
+int main() {
     unsigned char public_key[32], private_key[64], seed[32], scalar[32];
     unsigned char other_public_key[32], other_private_key[64];
     unsigned char shared_secret[32], other_shared_secret[32];
@@ -22,15 +20,18 @@ int main(int argc, char *argv[]) {
     clock_t end;
     int i;
 
+    const unsigned char message[] = "Hello, world!";
+    const int message_len = strlen((char*) message);
+
     /* create a random seed, and a keypair out of that seed */
     ed25519_create_seed(seed);
     ed25519_create_keypair(public_key, private_key, seed);
 
     /* create signature on the message with the keypair */
-    ed25519_sign(signature, message, strlen(message), public_key, private_key);
+    ed25519_sign(signature, message, message_len, public_key, private_key);
 
     /* verify the signature */
-    if (ed25519_verify(signature, message, strlen(message), public_key)) {
+    if (ed25519_verify(signature, message, message_len, public_key)) {
         printf("valid signature\n");
     } else {
         printf("invalid signature\n");
@@ -41,10 +42,10 @@ int main(int argc, char *argv[]) {
     ed25519_add_scalar(public_key, private_key, scalar);
 
     /* create signature with the new keypair */
-    ed25519_sign(signature, message, strlen(message), public_key, private_key);
+    ed25519_sign(signature, message, message_len, public_key, private_key);
 
     /* verify the signature with the new keypair */
-    if (ed25519_verify(signature, message, strlen(message), public_key)) {
+    if (ed25519_verify(signature, message, message_len, public_key)) {
         printf("valid signature\n");
     } else {
         printf("invalid signature\n");
@@ -52,7 +53,7 @@ int main(int argc, char *argv[]) {
 
     /* make a slight adjustment and verify again */
     signature[44] ^= 0x10;
-    if (ed25519_verify(signature, message, strlen(message), public_key)) {
+    if (ed25519_verify(signature, message, message_len, public_key)) {
         printf("did not detect signature change\n");
     } else {
         printf("correctly detected signature change\n");
@@ -102,7 +103,7 @@ int main(int argc, char *argv[]) {
     printf("testing sign performance: ");
     start = clock();
     for (i = 0; i < 10000; ++i) {
-        ed25519_sign(signature, message, strlen(message), public_key, private_key);
+        ed25519_sign(signature, message, message_len, public_key, private_key);
     }
     end = clock();
 
@@ -111,7 +112,7 @@ int main(int argc, char *argv[]) {
     printf("testing verify performance: ");
     start = clock();
     for (i = 0; i < 10000; ++i) {
-        ed25519_verify(signature, message, strlen(message), public_key);
+        ed25519_verify(signature, message, message_len, public_key);
     }
     end = clock();
 

@@ -64,7 +64,8 @@ Creates a 32 byte random seed in `seed` for key generation. `seed` must be a
 writable 32 byte buffer. Returns 0 on success, and nonzero on failure.
 
 ```c
-void ed25519_create_keypair(unsigned char *public_key, unsigned char *private_key, const unsigned char *seed);
+void ed25519_create_keypair(unsigned char *public_key, unsigned char *private_key,
+                            const unsigned char *seed);
 ```
 
 Creates a new key pair from the given seed. `public_key` must be a writable 32
