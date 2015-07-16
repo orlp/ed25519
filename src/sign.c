@@ -4,6 +4,14 @@
 #include "sc.h"
 
 
+void ed25519_get_pubkey(unsigned char *public_key, const unsigned char *private_key) {
+    ge_p3 A;
+
+    ge_scalarmult_base(&A, private_key);
+    ge_p3_tobytes(public_key, &A);
+}
+
+
 void ed25519_sign(unsigned char *signature, const unsigned char *message, size_t message_len, const unsigned char *public_key, const unsigned char *private_key) {
     sha512_context hash;
     unsigned char hram[64];
