@@ -225,7 +225,7 @@ void fe_cswap(fe f,fe g,unsigned int b) {
     int32_t x7 = f7 ^ g7;
     int32_t x8 = f8 ^ g8;
     int32_t x9 = f9 ^ g9;
-    b = -b;
+    b = (unsigned int) (- (int) b); /* silence warning */
     x0 &= b;
     x1 &= b;
     x2 &= b;
