@@ -1,3 +1,4 @@
+#include <string.h>
 #include "ed25519.h"
 #include "sha512.h"
 #include "ge.h"
