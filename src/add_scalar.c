@@ -1,6 +1,7 @@
 #include "ed25519.h"
 #include "ge.h"
 #include "sc.h"
+#include "sha512.h"
 
 
 /* see http://crypto.stackexchange.com/a/6215/4697 */
@@ -14,6 +15,9 @@ void ed25519_add_scalar(unsigned char *public_key, unsigned char *private_key, c
     ge_p3 public_key_unpacked;
     ge_cached T;
 
+    sha512_context hash;
+    unsigned char hashbuf[64];
+
     int i;
 
     /* copy the scalar and clear highest bit */
@@ -25,6 +29,15 @@ void ed25519_add_scalar(unsigned char *public_key, unsigned char *private_key, c
     /* private key: a = n + t */
     if (private_key) {
         sc_muladd(private_key, SC_1, n, private_key);
+
+        // https://github.com/orlp/ed25519/issues/3
+        sha512_init(&hash);
+        sha512_update(&hash, private_key + 32, 32);
+        sha512_update(&hash, scalar, 32);
+        sha512_final(&hash, hashbuf);
+        for (i = 0; i < 32; ++i) {
+            private_key[32 + i] = hashbuf[i];
+        }
     }
 
     /* public key: A = nB + T */
