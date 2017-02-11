@@ -73,6 +73,14 @@ byte buffer, `private_key` must be a writable 64 byte buffer and `seed` must be
 a 32 byte buffer.
 
 ```c
+void ed25519_get_pubkey(unsigned char *public_key, const unsigned char *private_key);
+```
+
+Derives public key from the given private key. `public_key` must be 
+a writable 32 byte buffer, `private_key` must be a 64 byte buffer with 
+a valid private key.
+
+```c
 void ed25519_sign(unsigned char *signature,
                   const unsigned char *message, size_t message_len,
                   const unsigned char *public_key, const unsigned char *private_key);
