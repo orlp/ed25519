@@ -117,7 +117,7 @@ int main() {
     end = clock();
 
     printf("%fus per signature\n", ((double) ((end - start) * 1000)) / CLOCKS_PER_SEC / i * 1000);
-    
+
 
     printf("testing keypair scalar addition performance: ");
     start = clock();

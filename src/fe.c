@@ -22,7 +22,7 @@ static uint64_t load_4(const unsigned char *in) {
     result |= ((uint64_t) in[1]) << 8;
     result |= ((uint64_t) in[2]) << 16;
     result |= ((uint64_t) in[3]) << 24;
-    
+
     return result;
 }
 
@@ -109,7 +109,7 @@ void fe_add(fe h, const fe f, const fe g) {
     int32_t h7 = f7 + g7;
     int32_t h8 = f8 + g8;
     int32_t h9 = f9 + g9;
-    
+
     h[0] = h0;
     h[1] = h1;
     h[2] = h2;
@@ -174,7 +174,7 @@ void fe_cmov(fe f, const fe g, unsigned int b) {
     x7 &= b;
     x8 &= b;
     x9 &= b;
-    
+
     f[0] = f0 ^ x0;
     f[1] = f1 ^ x1;
     f[2] = f2 ^ x2;
@@ -275,7 +275,7 @@ void fe_copy(fe h, const fe f) {
     int32_t f7 = f[7];
     int32_t f8 = f[8];
     int32_t f9 = f[9];
-    
+
     h[0] = f0;
     h[1] = f1;
     h[2] = f2;
@@ -461,7 +461,7 @@ int fe_isnegative(const fe f) {
     unsigned char s[32];
 
     fe_tobytes(s, f);
-    
+
     return s[0] & 1;
 }
 
