@@ -21,6 +21,11 @@ void ge_add(ge_p1p1 *r, const ge_p3 *p, const ge_cached *q) {
     fe_sub(r->T, t0, r->T);
 }
 
+static int64_t shift_left(int64_t v, int s) {
+    // shift unsigned types to avoid undefined behavior of shifting negative
+    // values
+    return (int64_t)(((uint64_t)v) << s);
+}
 
 static void slide(signed char *r, const unsigned char *a) {
     int i;
@@ -35,11 +40,11 @@ static void slide(signed char *r, const unsigned char *a) {
         if (r[i]) {
             for (b = 1; b <= 6 && i + b < 256; ++b) {
                 if (r[i + b]) {
-                    if (r[i] + (r[i + b] << b) <= 15) {
-                        r[i] += r[i + b] << b;
+                    if (r[i] + shift_left(r[i + b], b) <= 15) {
+                        r[i] += shift_left(r[i + b], b);
                         r[i + b] = 0;
-                    } else if (r[i] - (r[i + b] << b) >= -15) {
-                        r[i] -= r[i + b] << b;
+                    } else if (r[i] - shift_left(r[i + b], b) >= -15) {
+                        r[i] -= shift_left(r[i + b], b);
 
                         for (k = i + b; k < 256; ++k) {
                             if (!r[k]) {
@@ -356,7 +361,7 @@ static void cmov(ge_precomp *t, const ge_precomp *u, unsigned char b) {
 static void select(ge_precomp *t, int pos, signed char b) {
     ge_precomp minust;
     unsigned char bnegative = negative(b);
-    unsigned char babs = b - (((-bnegative) & b) << 1);
+    unsigned char babs = b - shift_left(((-bnegative) & b), 1);
     fe_1(t->yplusx);
     fe_1(t->yminusx);
     fe_0(t->xy2d);
@@ -404,7 +409,7 @@ void ge_scalarmult_base(ge_p3 *h, const unsigned char *a) {
         e[i] += carry;
         carry = e[i] + 8;
         carry >>= 4;
-        e[i] -= carry << 4;
+        e[i] -= shift_left(carry, 4);
     }
 
     e[63] += carry;
