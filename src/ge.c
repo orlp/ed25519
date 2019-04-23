@@ -331,8 +331,8 @@ void ge_p3_tobytes(unsigned char *s, const ge_p3 *h) {
 
 
 static unsigned char equal(signed char b, signed char c) {
-    unsigned char ub = b;
-    unsigned char uc = c;
+    unsigned char ub = (unsigned char)b;
+    unsigned char uc = (unsigned char)c;
     unsigned char x = ub ^ uc; /* 0: yes; 1..255: no */
     uint64_t y = x; /* 0: yes; 1..255: no */
     y -= 1; /* large: yes; 0..254: no */
@@ -341,7 +341,7 @@ static unsigned char equal(signed char b, signed char c) {
 }
 
 static unsigned char negative(signed char b) {
-    uint64_t x = b; /* 18446744073709551361..18446744073709551615: yes; 0..255: no */
+    uint64_t x = (uint64_t) b; /* 18446744073709551361..18446744073709551615: yes; 0..255: no */
     x >>= 63; /* 1: yes; 0: no */
     return (unsigned char) x;
 }
@@ -356,18 +356,18 @@ static void cmov(ge_precomp *t, const ge_precomp *u, unsigned char b) {
 static void select(ge_precomp *t, int pos, signed char b) {
     ge_precomp minust;
     unsigned char bnegative = negative(b);
-    unsigned char babs = b - (((-bnegative) & b) << 1);
+    unsigned char babs = (unsigned char) (b - (((-bnegative) & b) << 1));
     fe_1(t->yplusx);
     fe_1(t->yminusx);
     fe_0(t->xy2d);
-    cmov(t, &base[pos][0], equal(babs, 1));
-    cmov(t, &base[pos][1], equal(babs, 2));
-    cmov(t, &base[pos][2], equal(babs, 3));
-    cmov(t, &base[pos][3], equal(babs, 4));
-    cmov(t, &base[pos][4], equal(babs, 5));
-    cmov(t, &base[pos][5], equal(babs, 6));
-    cmov(t, &base[pos][6], equal(babs, 7));
-    cmov(t, &base[pos][7], equal(babs, 8));
+    cmov(t, &base[pos][0], equal((signed char) babs, 1));
+    cmov(t, &base[pos][1], equal((signed char) babs, 2));
+    cmov(t, &base[pos][2], equal((signed char) babs, 3));
+    cmov(t, &base[pos][3], equal((signed char) babs, 4));
+    cmov(t, &base[pos][4], equal((signed char) babs, 5));
+    cmov(t, &base[pos][5], equal((signed char) babs, 6));
+    cmov(t, &base[pos][6], equal((signed char) babs, 7));
+    cmov(t, &base[pos][7], equal((signed char) babs, 8));
     fe_copy(minust.yplusx, t->yminusx);
     fe_copy(minust.yminusx, t->yplusx);
     fe_neg(minust.xy2d, t->xy2d);
