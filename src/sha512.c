@@ -88,7 +88,7 @@ static const uint64_t K[80] = {
 #endif
 
 /* compress 1024-bits */
-static int sha512_compress(sha512_context *md, unsigned char *buf)
+static int sha512_compress(sha512_context *md, const unsigned char *buf)
 {
     uint64_t S[8], W[80], t0, t1;
     int i;
@@ -180,7 +180,7 @@ int sha512_update (sha512_context * md, const unsigned char *in, size_t inlen)
     }                                                                                       
     while (inlen > 0) {                                                                     
         if (md->curlen == 0 && inlen >= 128) {                           
-           if ((err = sha512_compress (md, (unsigned char *)in)) != 0) {               
+           if ((err = sha512_compress (md, in)) != 0) {
               return err;                                                                   
            }                                                                                
            md->length += 128 * 8;                                        
