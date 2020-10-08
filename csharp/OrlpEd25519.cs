@@ -127,12 +127,68 @@ namespace OrlpEd25519
 
         #region Function mapping
 
-        // TODO: function mapping (delegates)
-        
+        /*
+         * 
+#ifndef ED25519_NO_SEED
+int ORLP_ED25519_DECLSPEC ed25519_create_seed(unsigned char *seed);
+#endif
+
+void ORLP_ED25519_DECLSPEC ed25519_create_keypair(unsigned char *public_key, unsigned char *private_key, const unsigned char *seed);
+void ORLP_ED25519_DECLSPEC ed25519_sign(unsigned char *signature, const unsigned char *message, size_t message_len, const unsigned char *public_key, const unsigned char *private_key);
+int ORLP_ED25519_DECLSPEC ed25519_verify(const unsigned char *signature, const unsigned char *message, size_t message_len, const unsigned char *public_key);
+void ORLP_ED25519_DECLSPEC ed25519_add_scalar(unsigned char *public_key, unsigned char *private_key, const unsigned char *scalar);
+void ORLP_ED25519_DECLSPEC ed25519_key_exchange(unsigned char *shared_secret, const unsigned char *public_key, const unsigned char *private_key);
+
+         */
+
+        private delegate int CreateSeedDelegate(
+            [MarshalAs(UnmanagedType.LPArray)] byte[] outputSeed
+        );
+
+        private delegate void CreateKeypairDelegate(
+            [MarshalAs(UnmanagedType.LPArray)] byte[] outputPublicKey,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] outputPrivateKey,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] inputSeed
+        );
+
+        private delegate void SignDelegate(
+            [MarshalAs(UnmanagedType.LPArray)] byte[] outputSignature,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] inputMessage,
+            [MarshalAs(UnmanagedType.U8)] ulong inputMessageLength,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] inputPublicKey,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] inputPrivateKey
+        );
+
+        private delegate int VerifyDelegate(
+            [MarshalAs(UnmanagedType.LPArray)] byte[] outputSignature,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] inputMessage,
+            [MarshalAs(UnmanagedType.U8)] ulong inputMessageLength,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] inputPublicKey
+        );
+
+        private delegate void AddScalarDelegate(
+            [MarshalAs(UnmanagedType.LPArray)] byte[] outputPublicKey,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] outputPrivateKey,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] inputScalar
+        );
+
+        private delegate void KeyExchangeDelegate(
+            [MarshalAs(UnmanagedType.LPArray)] byte[] outputSharedSecret,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] inputPublicKey,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] inputPrivateKey
+        );
+
         #endregion
 
         private IntPtr lib;
         private ISharedLibLoadUtils loadUtils = null;
+
+        private CreateSeedDelegate createSeedDelegate;
+        private CreateKeypairDelegate createKeypairDelegate;
+        private SignDelegate signDelegate;
+        private VerifyDelegate verifyDelegate;
+        private AddScalarDelegate addScalarDelegate;
+        private KeyExchangeDelegate keyExchangeDelegate;
 
         /// <summary>
         /// Absolute path to the orlp-ed25519 shared library that is currently loaded into memory.
@@ -209,11 +265,52 @@ namespace OrlpEd25519
             lib = loadUtils.LoadLibrary(LoadedLibraryPath);
             if (lib == IntPtr.Zero)
             {
+                goto hell; // The gates of hell opened, and out came the beginning of marshalling, DLL hell and C# interop...
+            }
+
+            IntPtr createSeed = loadUtils.GetProcAddress(lib, "ed25519_create_seed");
+            if (createSeed == IntPtr.Zero)
+            {
                 goto hell;
             }
 
-            // TODO: load functions from DLL here
-            
+            IntPtr createKeypair = loadUtils.GetProcAddress(lib, "ed25519_create_keypair");
+            if (createKeypair == IntPtr.Zero)
+            {
+                goto hell;
+            }
+
+            IntPtr sign = loadUtils.GetProcAddress(lib, "ed25519_sign");
+            if (sign == IntPtr.Zero)
+            {
+                goto hell;
+            }
+
+            IntPtr verify = loadUtils.GetProcAddress(lib, "ed25519_verify");
+            if (verify == IntPtr.Zero)
+            {
+                goto hell;
+            }
+
+            IntPtr addScalar = loadUtils.GetProcAddress(lib, "ed25519_add_scalar");
+            if (addScalar == IntPtr.Zero)
+            {
+                goto hell;
+            }
+
+            IntPtr keyExchange = loadUtils.GetProcAddress(lib, "ed25519_key_exchange");
+            if (keyExchange == IntPtr.Zero)
+            {
+                goto hell;
+            }
+
+            createSeedDelegate = Marshal.GetDelegateForFunctionPointer<CreateSeedDelegate>(createSeed);
+            createKeypairDelegate = Marshal.GetDelegateForFunctionPointer<CreateKeypairDelegate>(createKeypair);
+            signDelegate = Marshal.GetDelegateForFunctionPointer<SignDelegate>(sign);
+            verifyDelegate = Marshal.GetDelegateForFunctionPointer<VerifyDelegate>(verify);
+            addScalarDelegate = Marshal.GetDelegateForFunctionPointer<AddScalarDelegate>(addScalar);
+            keyExchangeDelegate = Marshal.GetDelegateForFunctionPointer<KeyExchangeDelegate>(keyExchange);
+
             return;
 
             hell:
