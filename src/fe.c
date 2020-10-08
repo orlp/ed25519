@@ -1,5 +1,5 @@
-#include "fixedint.h"
-#include "fe.h"
+#include "../include/orlp-ed25519/fixedint.h"
+#include "../include/orlp-ed25519/fe.h"
 
 
 /*

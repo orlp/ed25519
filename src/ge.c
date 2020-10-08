@@ -1,5 +1,5 @@
-#include "ge.h"
-#include "precomp_data.h"
+#include "../include/orlp-ed25519/ge.h"
+#include "../include/orlp-ed25519/precomp_data.h"
 
 
 /*

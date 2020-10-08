@@ -1,7 +1,7 @@
-#include "ed25519.h"
-#include "ge.h"
-#include "sc.h"
-#include "sha512.h"
+#include "../include/orlp-ed25519/ed25519.h"
+#include "../include/orlp-ed25519/ge.h"
+#include "../include/orlp-ed25519/sc.h"
+#include "../include/orlp-ed25519/sha512.h"
 
 
 /* see http://crypto.stackexchange.com/a/6215/4697 */
