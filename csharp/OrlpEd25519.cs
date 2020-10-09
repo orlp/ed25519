@@ -133,17 +133,17 @@ namespace OrlpEd25519
         #region Function mapping
 
         private delegate int CreateSeedDelegate(
-            [MarshalAs(UnmanagedType.LPArray)] byte[] outputSeed
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 32)] byte[] outputSeed
         );
 
         private delegate void CreateKeypairDelegate(
-            [MarshalAs(UnmanagedType.LPArray)] byte[] outputPublicKey,
-            [MarshalAs(UnmanagedType.LPArray)] byte[] outputPrivateKey,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 32)] byte[] outputPublicKey,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 64)] byte[] outputPrivateKey,
             [MarshalAs(UnmanagedType.LPArray)] byte[] inputSeed
         );
 
         private delegate void SignDelegate(
-            [MarshalAs(UnmanagedType.LPArray)] byte[] outputSignature,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 64)] byte[] outputSignature,
             [MarshalAs(UnmanagedType.LPArray)] byte[] inputMessage,
             [MarshalAs(UnmanagedType.U8)] ulong inputMessageLength,
             [MarshalAs(UnmanagedType.LPArray)] byte[] inputPublicKey,
@@ -158,20 +158,20 @@ namespace OrlpEd25519
         );
 
         private delegate void AddScalarDelegate(
-            [MarshalAs(UnmanagedType.LPArray)] byte[] outputPublicKey,
-            [MarshalAs(UnmanagedType.LPArray)] byte[] outputPrivateKey,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 32)] byte[] publicKey,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 64)] byte[] privateKey,
             [MarshalAs(UnmanagedType.LPArray)] byte[] inputScalar
         );
 
         private delegate void KeyExchangeDelegate(
-            [MarshalAs(UnmanagedType.LPArray)] byte[] outputSharedSecret,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 32)] byte[] outputSharedSecret,
             [MarshalAs(UnmanagedType.LPArray)] byte[] inputPublicKey,
             [MarshalAs(UnmanagedType.LPArray)] byte[] inputPrivateKey
         );
 
         private delegate void Ref10KeyConversionDelegate(
             [MarshalAs(UnmanagedType.LPArray)] byte[] inputPrivateKey,
-            [MarshalAs(UnmanagedType.LPArray)] byte[] outputPrivateKey
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 64)] byte[] outputPrivateKey
         );
 
         #endregion
@@ -536,7 +536,12 @@ namespace OrlpEd25519
     {
         static void Main()
         {
-            Console.WriteLine("--- orlp-ed25519 ---\n");
+            static string BytesToHexString(byte[] bytes)
+            {
+                return BitConverter.ToString(bytes).Replace("-", "");
+            }
+
+            Console.WriteLine("\n--- orlp-ed25519 ---\n");
 
             const string messageString = "Rise and shine, Dr. Freeman... rise and... shiiine!";
 
@@ -556,14 +561,14 @@ namespace OrlpEd25519
 
             ed25519.AddScalar(keypair.Item1, keypair.Item2, seed2);
 
-            Console.WriteLine($"Generated seed: {BitConverter.ToString(seed).Replace("-", "")}\n\n");
-            Console.WriteLine($"Generated public key: {BitConverter.ToString(keypair.Item1).Replace("-", "")}\n\n");
-            Console.WriteLine($"Generated private key: {BitConverter.ToString(keypair.Item2).Replace("-", "")}\n\n");
-            Console.WriteLine($"Message: {messageString}\n\n");
-            Console.WriteLine($"Signature: {BitConverter.ToString(signature).Replace("-", "")}\n\n");
-            Console.WriteLine($"Valid: {valid}\n\n");
-            Console.WriteLine($"Public key after adding scalar \"{BitConverter.ToString(seed2).Replace("-", "")}\": {BitConverter.ToString(keypair.Item1).Replace("-", "")}\n\n");
-            Console.WriteLine($"Private key after adding scalar \"{BitConverter.ToString(seed2).Replace("-", "")}\": {BitConverter.ToString(keypair.Item2).Replace("-", "")}\n\n");
+            Console.WriteLine($"Generated seed: {BytesToHexString(seed)}\n");
+            Console.WriteLine($"Generated public key: {BytesToHexString(keypair.Item1)}\n");
+            Console.WriteLine($"Generated private key: {BytesToHexString(keypair.Item2)}\n");
+            Console.WriteLine($"Message: {messageString}\n");
+            Console.WriteLine($"Signature: {BytesToHexString(signature)}\n");
+            Console.WriteLine($"Valid: {valid}\n");
+            Console.WriteLine($"Public key after adding scalar \"{BytesToHexString(seed2)}\": {BytesToHexString(keypair.Item1)}\n");
+            Console.WriteLine($"Private key after adding scalar \"{BytesToHexString(seed2)}\": {BytesToHexString(keypair.Item2)}\n");
         }
     }
 }
