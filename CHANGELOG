@@ -9,4 +9,5 @@ that I've applied, in order of importance/relevance:
 * Added CMakeLists.txt and build.sh for easy packaging and inclusion into other projects.
 * Deleted .dll files inside repo.
 * Adapted readme.md accordingly.
+* Implemented C# wrapper class.
 * Added this CHANGELOG file.
