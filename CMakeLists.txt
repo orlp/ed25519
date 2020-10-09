@@ -43,6 +43,7 @@ set(ORLP_ED25519_SRC
         ${CMAKE_CURRENT_LIST_DIR}/src/verify.c
         ${CMAKE_CURRENT_LIST_DIR}/src/add_scalar.c
         ${CMAKE_CURRENT_LIST_DIR}/src/key_exchange.c
+        ${CMAKE_CURRENT_LIST_DIR}/src/key_convert.c
         )
 
 add_library(${PROJECT_NAME} ${ORLP_ED25519_SRC})

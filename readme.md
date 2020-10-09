@@ -116,6 +116,15 @@ shared secret. It is recommended to hash the shared secret before using it.
 `shared_secret` must be a 32 byte writable buffer where the shared secret will
 be stored.
 
+```c
+void ed25519_key_convert_ref10_to_orlp(const unsigned char *private_key_ref10, 
+                                       unsigned char *private_key_orlp);
+```
+
+Converts a private key generated in the ref10 format (e.g. via libsodium) into this library's private key format.
+`private_key_ref10` needs to be a 32B readable byte buffer containing the ref10 ed25519 private key.
+`private_key_orlp` must be a writable 64B output byte buffer into which the converted key shall be written.
+
 Example
 -------
 
