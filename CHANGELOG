@@ -8,6 +8,7 @@ that I've applied, in order of importance/relevance:
 * Added “ORLP_” prefix to declspec macro (to prevent possible collisions with other libraries making use of the same name).
 * Added CMakeLists.txt and build.sh for easy packaging and inclusion into other projects.
 * Added fix from orlp/ed25519 pull request #15: https://github.com/orlp/ed25519/pull/15
+* Added fix from orlp/ed25519 issue #10: https://github.com/orlp/ed25519/issues/10
 * Deleted .dll files inside repo.
 * Adapted readme.md accordingly.
 * Implemented C# wrapper class.
