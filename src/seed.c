@@ -1,4 +1,4 @@
-#include "../include/orlp-ed25519/ed25519.h"
+#include "ed25519.h"
 
 #ifndef ED25519_NO_SEED
 

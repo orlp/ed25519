@@ -21,18 +21,14 @@ if (${ORLP_ED25519_DLL})
     add_compile_definitions("ORLP_ED25519_DLL=1")
 endif ()
 
-set(ORLP_ED25519_INCLUDE_DIR
-        ${CMAKE_CURRENT_LIST_DIR}/include
-        )
-
 set(ORLP_ED25519_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/include/orlp-ed25519/precomp_data.h
-        ${CMAKE_CURRENT_LIST_DIR}/include/orlp-ed25519/fixedint.h
-        ${CMAKE_CURRENT_LIST_DIR}/include/orlp-ed25519/ed25519.h
-        ${CMAKE_CURRENT_LIST_DIR}/include/orlp-ed25519/sha512.h
-        ${CMAKE_CURRENT_LIST_DIR}/include/orlp-ed25519/ge.h
-        ${CMAKE_CURRENT_LIST_DIR}/include/orlp-ed25519/fe.h
-        ${CMAKE_CURRENT_LIST_DIR}/include/orlp-ed25519/sc.h
+        ${CMAKE_CURRENT_LIST_DIR}/src/precomp_data.h
+        ${CMAKE_CURRENT_LIST_DIR}/src/fixedint.h
+        ${CMAKE_CURRENT_LIST_DIR}/src/ed25519.h
+        ${CMAKE_CURRENT_LIST_DIR}/src/sha512.h
+        ${CMAKE_CURRENT_LIST_DIR}/src/ge.h
+        ${CMAKE_CURRENT_LIST_DIR}/src/fe.h
+        ${CMAKE_CURRENT_LIST_DIR}/src/sc.h
         ${CMAKE_CURRENT_LIST_DIR}/src/ge.c
         ${CMAKE_CURRENT_LIST_DIR}/src/fe.c
         ${CMAKE_CURRENT_LIST_DIR}/src/sc.c
@@ -72,7 +68,12 @@ if (${ORLP_ED25519_PACKAGE})
 
     add_custom_command(TARGET ${PROJECT_NAME}
             POST_BUILD COMMAND ${CMAKE_COMMAND}
-            -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/include "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/include"
+            -E copy ${CMAKE_CURRENT_LIST_DIR}/src/ed25519.h "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/include/orlp-ed25519/ed25519.h"
+            )
+
+    add_custom_command(TARGET ${PROJECT_NAME}
+            POST_BUILD COMMAND ${CMAKE_COMMAND}
+            -E copy ${CMAKE_CURRENT_LIST_DIR}/license.txt "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/license.txt"
             )
 
     string(TOLOWER "${PROJECT_NAME}-${ORLP_ED25519_VERSION_STRING}-${CMAKE_SYSTEM_NAME}-${CMAKE_HOST_SYSTEM_PROCESSOR}.tar.gz" ${PROJECT_NAME}_OUTPUT_ARCHIVE_FILENAME)
@@ -83,4 +84,4 @@ if (${ORLP_ED25519_PACKAGE})
             )
 endif ()
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${ORLP_ED25519_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)

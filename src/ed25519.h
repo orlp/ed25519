@@ -1,5 +1,5 @@
-#ifndef ED25519_H
-#define ED25519_H
+#ifndef ORLP_ED25519_H
+#define ORLP_ED25519_H
 
 #include <stddef.h>
 
@@ -35,4 +35,4 @@ void ORLP_ED25519_DECLSPEC ed25519_key_convert_ref10_to_orlp(const unsigned char
 }
 #endif
 
-#endif
+#endif // ORLP_ED25519_H

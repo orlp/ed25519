@@ -1,11 +1,12 @@
-Raphael Beck, the 8th of October, 2020
+Raphael Beck, the 9th of October, 2020
 
 ---
 
 As per the Zlib license used by this project, here are the changes
-that I've applied, in order or importance/relevance:
+that I've applied, in order of importance/relevance:
 
-* Moved header files into dedicated include directory.
 * Added “ORLP_” prefix to declspec macro (to prevent possible collisions with other libraries making use of the same name).
 * Added CMakeLists.txt and build.sh for easy packaging and inclusion into other projects.
 * Deleted .dll files inside repo.
+* Adapted readme.md accordingly.
+* Added this CHANGELOG file.

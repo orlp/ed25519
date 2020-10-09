@@ -37,8 +37,7 @@ Usage
 
 Simply add all .c and .h files in the `src/` folder to your project and include
 `ed25519.h` in any file you want to use the API. If you prefer to use a shared
-library, only copy `ed25519.h` and define `ED25519_DLL` before importing. A
-windows DLL is pre-built.
+library, only copy `ed25519.h` and define `ORLP_ED25519_DLL` before importing.
 
 There are no defined types for seeds, private keys, public keys, shared secrets
 or signatures. Instead simple `unsigned char` buffers are used with the

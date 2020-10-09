@@ -1,5 +1,5 @@
-#include "../include/orlp-ed25519/ed25519.h"
-#include "../include/orlp-ed25519/fe.h"
+#include "ed25519.h"
+#include "fe.h"
 
 void ed25519_key_exchange(unsigned char *shared_secret, const unsigned char *public_key, const unsigned char *private_key) {
     unsigned char e[32];

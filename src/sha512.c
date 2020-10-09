@@ -9,8 +9,8 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-#include "../include/orlp-ed25519/fixedint.h"
-#include "../include/orlp-ed25519/sha512.h"
+#include "fixedint.h"
+#include "sha512.h"
 
 /* the K array */
 static const uint64_t K[80] = {
