@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Runtime.InteropServices;
 
@@ -23,14 +24,11 @@ namespace OrlpEd25519
 
         private class SharedLibLoadUtilsWindows : ISharedLibLoadUtils
         {
-            [DllImport("kernel32.dll")]
-            private static extern IntPtr LoadLibrary(string fileName);
+            [DllImport("kernel32.dll")] private static extern IntPtr LoadLibrary(string fileName);
 
-            [DllImport("kernel32.dll")]
-            private static extern int FreeLibrary(IntPtr handle);
+            [DllImport("kernel32.dll")] private static extern int FreeLibrary(IntPtr handle);
 
-            [DllImport("kernel32.dll")]
-            private static extern IntPtr GetProcAddress(IntPtr handle, string procedureName);
+            [DllImport("kernel32.dll")] private static extern IntPtr GetProcAddress(IntPtr handle, string procedureName);
 
             void ISharedLibLoadUtils.FreeLibrary(IntPtr handle)
             {
@@ -52,17 +50,13 @@ namespace OrlpEd25519
         {
             const int RTLD_NOW = 2;
 
-            [DllImport("libdl.so")]
-            private static extern IntPtr dlopen(String fileName, int flags);
+            [DllImport("libdl.so")] private static extern IntPtr dlopen(String fileName, int flags);
 
-            [DllImport("libdl.so")]
-            private static extern IntPtr dlsym(IntPtr handle, String symbol);
+            [DllImport("libdl.so")] private static extern IntPtr dlsym(IntPtr handle, String symbol);
 
-            [DllImport("libdl.so")]
-            private static extern int dlclose(IntPtr handle);
+            [DllImport("libdl.so")] private static extern int dlclose(IntPtr handle);
 
-            [DllImport("libdl.so")]
-            private static extern IntPtr dlerror();
+            [DllImport("libdl.so")] private static extern IntPtr dlerror();
 
             public IntPtr LoadLibrary(string fileName)
             {
@@ -92,17 +86,13 @@ namespace OrlpEd25519
         {
             const int RTLD_NOW = 2;
 
-            [DllImport("libdl.dylib")]
-            private static extern IntPtr dlopen(String fileName, int flags);
+            [DllImport("libdl.dylib")] private static extern IntPtr dlopen(String fileName, int flags);
 
-            [DllImport("libdl.dylib")]
-            private static extern IntPtr dlsym(IntPtr handle, String symbol);
+            [DllImport("libdl.dylib")] private static extern IntPtr dlsym(IntPtr handle, String symbol);
 
-            [DllImport("libdl.dylib")]
-            private static extern int dlclose(IntPtr handle);
+            [DllImport("libdl.dylib")] private static extern int dlclose(IntPtr handle);
 
-            [DllImport("libdl.dylib")]
-            private static extern IntPtr dlerror();
+            [DllImport("libdl.dylib")] private static extern IntPtr dlerror();
 
             public IntPtr LoadLibrary(string fileName)
             {
@@ -215,48 +205,43 @@ namespace OrlpEd25519
                 throw new PlatformNotSupportedException("Unsupported OS");
             }
 
-            if (string.IsNullOrEmpty(sharedLibPathOverride))
+            if (!string.IsNullOrEmpty(sharedLibPathOverride))
             {
-                StringBuilder pathBuilder = new StringBuilder(256);
-                pathBuilder.Append("lib/");
-
-                switch (RuntimeInformation.ProcessArchitecture)
-                {
-                    case Architecture.X64:
-                        pathBuilder.Append("x64/");
-                        break;
-                    case Architecture.X86:
-                        pathBuilder.Append("x86/");
-                        break;
-                    case Architecture.Arm:
-                        pathBuilder.Append("armeabi-v7a/");
-                        break;
-                    case Architecture.Arm64:
-                        pathBuilder.Append("arm64-v8a/");
-                        break;
-                }
-
-                if (!Directory.Exists(pathBuilder.ToString()))
-                {
-                    throw new PlatformNotSupportedException($"orlp-ed25519 shared library not found in {pathBuilder.ToString()} and/or unsupported CPU architecture. Please don't forget to copy the orlp-ed25519 shared libraries/DLL into the 'lib/{{CPU_ARCHITECTURE}}/{{OS}}/{{SHARED_LIB_FILE}}' folder of your output build directory.");
-                }
-
-                pathBuilder.Append(os);
-                pathBuilder.Append('/');
-
-                string[] l = Directory.GetFiles(pathBuilder.ToString());
-                if (l == null || l.Length != 1)
-                {
-                    throw new FileLoadException("There should only be exactly one orlp-ed25519 shared library file per supported platform!");
-                }
-
-                pathBuilder.Append(Path.GetFileName(l[0]));
-                LoadedLibraryPath = Path.GetFullPath(pathBuilder.ToString());
-                pathBuilder.Clear();
+                LoadedLibraryPath = sharedLibPathOverride;
             }
             else
             {
-                LoadedLibraryPath = sharedLibPathOverride;
+                string cpu = RuntimeInformation.ProcessArchitecture switch
+                {
+                    Architecture.X64 => "x64",
+                    Architecture.X86 => "x86",
+                    Architecture.Arm => "armeabi-v7a",
+                    Architecture.Arm64 => "arm64-v8a",
+                    _ => throw new PlatformNotSupportedException("CPU Architecture not supported!")
+                };
+
+                string path = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(Assembly.GetCallingAssembly().Location) ?? "."), "lib", cpu, os);
+
+                if (!Directory.Exists(path))
+                {
+                    throw new PlatformNotSupportedException($"Shared library not found in {path} and/or unsupported CPU architecture. Please don't forget to copy the shared libraries/DLL into the 'lib/{{CPU_ARCHITECTURE}}/{{OS}}/{{SHARED_LIB_FILE}}' folder of your output build directory. ");
+                }
+
+                bool found = false;
+                foreach (string file in Directory.GetFiles(path))
+                {
+                    if (file.ToLower().Contains("ed25519"))
+                    {
+                        LoadedLibraryPath = Path.GetFullPath(Path.Combine(path, file));
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    throw new FileLoadException($"Shared library not found in {path} and/or unsupported CPU architecture. Please don't forget to copy the shared libraries/DLL into the 'lib/{{CPU_ARCHITECTURE}}/{{OS}}/{{SHARED_LIB_FILE}}' folder of your output build directory. ");
+                }
             }
 
             lib = loadUtils.LoadLibrary(LoadedLibraryPath);
@@ -553,26 +538,26 @@ namespace OrlpEd25519
             byte[] seed = ed25519.CreateSeed();
 
             Console.WriteLine($"Generated seed: {BytesToHexString(seed)}\n");
-            
+
             ed25519.CreateKeypair(seed, out byte[] publicKey, out byte[] privateKey);
 
             Console.WriteLine($"Generated public key: {BytesToHexString(publicKey)}\n");
             Console.WriteLine($"Generated private key: {BytesToHexString(privateKey)}\n");
-            
+
             byte[] message = Encoding.UTF8.GetBytes(messageString);
 
             Console.WriteLine($"Message: {messageString}\n");
-            
+
             byte[] signature = ed25519.Sign(message, publicKey, privateKey);
 
             Console.WriteLine($"Signature: {BytesToHexString(signature)}\n");
-            
+
             bool valid = ed25519.Verify(signature, message, publicKey);
 
             Console.WriteLine($"Valid: {valid}\n");
-            
+
             byte[] seed2 = ed25519.CreateSeed();
-            
+
             ed25519.AddScalar(publicKey, privateKey, seed2);
 
             Console.WriteLine($"Public key after adding scalar \"{BytesToHexString(seed2)}\": {BytesToHexString(publicKey)}\n");
