@@ -72,6 +72,16 @@ byte buffer, `private_key` must be a writable 64 byte buffer and `seed` must be
 a 32 byte buffer.
 
 ```c
+void ed25519_create_keypair_ref10(unsigned char *public_key, unsigned char *private_key,
+                                  const unsigned char *seed);
+```
+
+Creates a new key pair from the given seed in the Ref10 format 
+(equivalent to what you'd get from the official SUPERCOP Ed25519 implementation and libsodium). 
+`public_key` must be a writable 32 byte buffer, `private_key` must be a writable 64 byte buffer and `seed` must be
+a 32 byte buffer.
+
+```c
 void ed25519_sign(unsigned char *signature,
                   const unsigned char *message, size_t message_len,
                   const unsigned char *public_key, const unsigned char *private_key);
@@ -80,6 +90,17 @@ void ed25519_sign(unsigned char *signature,
 Creates a signature of the given message with the given key pair. `signature`
 must be a writable 64 byte buffer. `message` must have at least `message_len`
 bytes to be read. 
+
+```c
+void ed25519_sign_ref10(unsigned char *signature,
+                        const unsigned char *message, size_t message_len,
+                        const unsigned char *private_key_ref10);
+```
+
+Creates a signature of the given message using the given Ref10-formatted private key. 
+`signature` must be a writable 64 byte buffer. `message` must have at least `message_len` bytes to be read.
+
+Use `ed25519_create_keypair_ref10` to generate a keypair with a Ref10 private key.
 
 ```c
 int ed25519_verify(const unsigned char *signature,
@@ -120,7 +141,8 @@ void ed25519_key_convert_ref10_to_orlp(const unsigned char *private_key_ref10,
                                        unsigned char *private_key_orlp);
 ```
 
-Converts a private key generated in the ref10 format (e.g. via libsodium) into this library's private key format.
+Converts a private key generated in the ref10 format (e.g. via libsodium) 
+into this library's private key format (slightly increases performance due to pre-hashing).
 `private_key_ref10` needs to be a 32B readable byte buffer containing the ref10 ed25519 private key.
 `private_key_orlp` must be a writable 64B output byte buffer into which the converted key shall be written.
 
