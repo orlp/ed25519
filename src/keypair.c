@@ -26,5 +26,6 @@ void ed25519_create_keypair_ref10(unsigned char *public_key, unsigned char *priv
     ge_scalarmult_base(&A, private_key_ref10);
     ge_p3_tobytes(public_key, &A);
 
-    memcpy(memcpy(private_key_ref10, seed, 32) + 32, public_key, 32);
+    memmove(private_key_ref10, seed, 32);
+    memmove(private_key_ref10 + 32, public_key, 32);
 }
