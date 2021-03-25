@@ -1,6 +1,5 @@
-#include "fixedint.h"
-#include "fe.h"
-
+#include "../include/fe.h"
+#include "../include/fixedint.h"
 
 /*
     helper functions
