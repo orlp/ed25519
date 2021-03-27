@@ -26,9 +26,9 @@ elseif (${ARCH} STREQUAL "i686")
     set(COMMON_COMPILER_OPTIONS "-m32")
 endif()
 
-add_library(${CMAKE_PROJECT_NAME} STATIC ${SOURCES})
+add_library(${PROJECT_NAME} STATIC ${SOURCES})
 target_compile_options(
-        ${CMAKE_PROJECT_NAME}
+        ${PROJECT_NAME}
         BEFORE PRIVATE
         ${COMMON_COMPILER_OPTIONS}
         -O3
@@ -37,10 +37,10 @@ target_compile_options(
         -Wpedantic
 )
 
-add_library(${CMAKE_PROJECT_NAME}-dyn SHARED ${SOURCES})
-set_target_properties(${CMAKE_PROJECT_NAME}-dyn PROPERTIES OUTPUT_NAME ${CMAKE_PROJECT_NAME})
+add_library(${PROJECT_NAME}-dyn SHARED ${SOURCES})
+set_target_properties(${PROJECT_NAME}-dyn PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
 target_compile_options(
-        ${CMAKE_PROJECT_NAME}-dyn
+        ${PROJECT_NAME}-dyn
         BEFORE PRIVATE
         ${COMMON_COMPILER_OPTIONS}
         -O3
@@ -49,6 +49,6 @@ target_compile_options(
         -Wpedantic
 )
 
-add_executable(${CMAKE_PROJECT_NAME}-test src/test.c)
-target_compile_options(${CMAKE_PROJECT_NAME}-test PRIVATE ${COMMON_COMPILER_OPTIONS})
-target_link_libraries(${CMAKE_PROJECT_NAME}-test ${CMAKE_PROJECT_NAME})
+add_executable(${PROJECT_NAME}-test src/test.c)
+target_compile_options(${PROJECT_NAME}-test PRIVATE ${COMMON_COMPILER_OPTIONS})
+target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
