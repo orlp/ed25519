@@ -3,7 +3,6 @@ image:
   - Ubuntu2004
   - macos-mojave
   - macos
-  - Visual Studio 2017
 for:
   -
     matrix:
