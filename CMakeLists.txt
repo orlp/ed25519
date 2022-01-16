@@ -5,12 +5,18 @@ set(CMAKE_C_STANDARD 11)
 
 set(ORLP_ED25519_MAJOR 1)
 set(ORLP_ED25519_MINOR 0)
-set(ORLP_ED25519_PATCH 1)
+set(ORLP_ED25519_PATCH 2)
 set(ORLP_ED25519_VERSION_STRING "${ORLP_ED25519_MAJOR}.${ORLP_ED25519_MINOR}.${ORLP_ED25519_PATCH}")
 
 option(ORLP_ED25519_DLL "Use as a DLL." OFF)
 option(ORLP_ED25519_BUILD_DLL "Build as a DLL." OFF)
+option(ORLP_ED25519_BUILD_TESTS "Build unit tests." OFF)
 option(ORLP_ED25519_PACKAGE "Build the library and package it into a .tar.gz after successfully building." OFF)
+option(ORLP_ED25519_NO_NULL_CHECKS "Strip some of the NULL safety checks from hot code paths to minimize branching (this increases necessity of ensuring never to pass NULL into the function arguments)." OFF)
+
+if (${ORLP_ED25519_NO_NULL_CHECKS})
+    add_compile_definitions("ORLP_ED25519_NO_NULL_CHECKS=1")
+endif ()
 
 if (${ORLP_ED25519_BUILD_DLL})
     add_compile_definitions("ORLP_ED25519_BUILD_DLL=1")
@@ -19,6 +25,10 @@ endif ()
 
 if (${ORLP_ED25519_DLL})
     add_compile_definitions("ORLP_ED25519_DLL=1")
+endif ()
+
+if (WIN32)
+    set(CMAKE_RELEASE_POSTFIX "_v${ORLP_ED25519_MAJOR}")
 endif ()
 
 set(ORLP_ED25519_SRC
@@ -44,6 +54,15 @@ set(ORLP_ED25519_SRC
 
 add_library(${PROJECT_NAME} ${ORLP_ED25519_SRC})
 
+if (${ORLP_ED25519_BUILD_TESTS})
+    add_executable(run_tests ${ORLP_ED25519_SRC} ${CMAKE_CURRENT_LIST_DIR}/test.c)
+    target_include_directories(run_tests PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
+
+    if (WIN32)
+        target_link_libraries(run_tests PUBLIC Advapi32)
+    endif ()
+endif ()
+
 if (${ORLP_ED25519_BUILD_DLL} OR BUILD_SHARED_LIBS)
     set_target_properties(${PROJECT_NAME} PROPERTIES
             VERSION ${ORLP_ED25519_VERSION_STRING}
@@ -52,6 +71,11 @@ if (${ORLP_ED25519_BUILD_DLL} OR BUILD_SHARED_LIBS)
 endif ()
 
 if (${ORLP_ED25519_PACKAGE})
+
+    if (NOT ORLP_ED25519_SYSNAME)
+        set(ORLP_ED25519_SYSNAME ${CMAKE_SYSTEM_NAME})
+    endif ()
+
     set_target_properties(${PROJECT_NAME} PROPERTIES
             ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/bin"
             LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/bin"
@@ -76,7 +100,7 @@ if (${ORLP_ED25519_PACKAGE})
             -E copy ${CMAKE_CURRENT_LIST_DIR}/license.txt "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/license.txt"
             )
 
-    string(TOLOWER "${PROJECT_NAME}-${ORLP_ED25519_VERSION_STRING}-${CMAKE_SYSTEM_NAME}-${CMAKE_HOST_SYSTEM_PROCESSOR}.tar.gz" ${PROJECT_NAME}_OUTPUT_ARCHIVE_FILENAME)
+    string(TOLOWER "${PROJECT_NAME}-${ORLP_ED25519_VERSION_STRING}-${ORLP_ED25519_SYSNAME}-${CMAKE_HOST_SYSTEM_PROCESSOR}.tar.gz" ${PROJECT_NAME}_OUTPUT_ARCHIVE_FILENAME)
 
     add_custom_command(TARGET ${PROJECT_NAME}
             POST_BUILD COMMAND ${CMAKE_COMMAND}
