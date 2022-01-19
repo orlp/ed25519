@@ -1,3 +1,5 @@
+---
+
 Raphael Beck, the 9th of October, 2020
 
 ---
@@ -13,3 +15,17 @@ that I've applied, in order of importance/relevance:
 * Adapted readme.md accordingly.
 * Implemented C# wrapper class.
 * Added this CHANGELOG file.
+
+---
+
+Raphael Beck, the 19th of January, 2022
+
+---
+
+* Added `.appveyor.yml`
+* Added build and test shell scripts (both for Windows and Linux/Mac)
+* Added feature flag to `CMakeLists.txt` for preventing potentially unnecessary `NULL`-checks
+* Reformatted src code files (using a .clang-format file)
+* * Aesthetic reasons only
+* Simplified verify function a little bit
+* * Rearranged the boolean logic parts to slightly reduce branching
