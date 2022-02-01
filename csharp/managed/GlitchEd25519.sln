@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlitchEd25519", "src\GlitchEd25519.csproj", "{53D67589-12ED-456A-A62D-AEE0065A4A43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlitchEd25519.Tests", "tests\GlitchEd25519.Tests.csproj", "{18516EB8-9B89-44BD-9A81-C5FA8DB2A12B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{53D67589-12ED-456A-A62D-AEE0065A4A43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53D67589-12ED-456A-A62D-AEE0065A4A43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53D67589-12ED-456A-A62D-AEE0065A4A43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53D67589-12ED-456A-A62D-AEE0065A4A43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18516EB8-9B89-44BD-9A81-C5FA8DB2A12B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18516EB8-9B89-44BD-9A81-C5FA8DB2A12B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18516EB8-9B89-44BD-9A81-C5FA8DB2A12B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18516EB8-9B89-44BD-9A81-C5FA8DB2A12B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

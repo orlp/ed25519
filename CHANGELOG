@@ -29,3 +29,13 @@ Raphael Beck, the 19th of January, 2022
 * * Aesthetic reasons only
 * Simplified verify function a little bit
 * * Rearranged the boolean logic parts to slightly reduce branching
+
+---
+
+Raphael Beck, the 01st of February, 2022
+
+---
+
+* Translated the library into C# 10 managed code
+* Created NuGet package out of it and uploaded it to nuget.org:
+* * https://www.nuget.org/packages/GlitchEd25519
