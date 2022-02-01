@@ -1,6 +1,4 @@
-﻿namespace GlitchEd25519;
-
-public static partial class GlitchEd25519
+﻿public static partial class GlitchEd25519
 {
     private static void sc_reduce(ref Span<byte> s)
     {

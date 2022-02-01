@@ -1,7 +1,5 @@
 ﻿using System.Security.Cryptography;
 
-namespace GlitchEd25519;
-
 /// <summary>
 /// C# translation of the <a href="https://github.com/GlitchedPolygons/GlitchEd25519">GlitchEd25519</a>
 /// fork of the <a href="https://github.com/orlp/ed25519">orlp/ed25519</a> C library.<para> </para>

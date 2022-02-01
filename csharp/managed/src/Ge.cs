@@ -1,6 +1,4 @@
-﻿namespace GlitchEd25519;
-
-public ref struct ge_p2
+﻿public ref struct ge_p2
 {
     public Span<int> X;
     public Span<int> Y;

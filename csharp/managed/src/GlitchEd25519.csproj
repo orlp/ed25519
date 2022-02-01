@@ -4,21 +4,26 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Authors />
+        <Authors/>
         <LangVersion>10</LangVersion>
         <Title>GlitchEd25519</Title>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>1.0.2</PackageVersion>
+        <PackageVersion>1.0.2.1</PackageVersion>
         <Description>A fork of Orson Peters' portable C implementation of Ed25519, a high-speed high-security public-key signature system. Translated from ANSI C into C# 10 by Glitched Polygons.</Description>
         <Copyright>Orson Peters</Copyright>
         <PackageLicenseExpression>Zlib</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/GlitchedPolygons/GlitchEd25519</PackageProjectUrl>
         <RepositoryUrl>https://github.com/GlitchedPolygons/GlitchEd25519</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIconUrl>https://files.glitchedpolygons.com/api/v1/files/1ur1w252jz5vcbpt</PackageIconUrl>
-        <Company />
-        <AssemblyVersion>1.0.2</AssemblyVersion>
-        <FileVersion>1.0.2</FileVersion>
+        <Company/>
+        <AssemblyVersion>1.0.2.1</AssemblyVersion>
+        <FileVersion>1.0.2.1</FileVersion>
         <PackageTags>ed25519 orlp lib public private key asymmetric cryptography signing verifying key exchange diffie-hellman</PackageTags>
+        <RootNamespace/>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 </Project>

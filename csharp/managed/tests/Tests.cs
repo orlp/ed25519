@@ -3,8 +3,6 @@ using System.Text;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GlitchEd25519.Tests;
-
 public class GlitchEd25519Tests
 {
     private readonly ITestOutputHelper testOutputHelper;
