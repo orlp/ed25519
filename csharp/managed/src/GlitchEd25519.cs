@@ -201,10 +201,29 @@ public static partial class GlitchEd25519
     }
 
     /// <summary>
+    /// Performs a key exchange on the given public key and private key in Ref10 format, producing a shared secret.<para> </para>
+    /// It is recommended to hash the shared secret before using it.<para> </para>
+    /// <paramref name="outSharedSecret"/> must be a 32 byte writable buffer where the shared secret will be stored.
+    /// </summary>
+    /// <param name="outSharedSecret">32B writable output buffer where to store the shared secret.</param>
+    /// <param name="publicKey">32B of very readable, high quality public key material.</param>
+    /// <param name="privateKeyRef10">64B Ref10 private key buffer.</param>
+    public static void KeyExchangeRef10(ref Span<byte> outSharedSecret, ReadOnlySpan<byte> publicKey, ReadOnlySpan<byte> privateKeyRef10)
+    {
+        Span<byte> privateKey = new byte[64];
+        
+        ConvertKeyFromRef10ToOrlp(ref privateKey, privateKeyRef10);
+        
+        KeyExchange(ref outSharedSecret, publicKey, privateKey);
+        
+        privateKey.Clear();
+    }
+
+    /// <summary>
     /// Adds scalar to the given key pair where scalar is a 32 byte buffer (possibly generated with ed25519_create_seed), generating a new key pair.<para> </para>
     /// You can calculate the public key sum without knowing the private key and vice versa by passing in NULL for the key you don't know.<para> </para>
     /// This is useful for enforcing randomness on a key pair by a third party while only knowing the public key, among other things.<para> </para>
-    /// Warning: the last bit of the scalar is ignored - if comparing scalars, make sure to clear it with <c>scalar[31] &= 127</c>.
+    /// Warning: the last bit of the scalar is ignored - if comparing scalars, make sure to clear it with <c>scalar[31] &amp;= 127</c>.
     /// </summary>
     /// <seealso href="http://crypto.stackexchange.com/a/6215/4697"/>
     /// <param name="outPublicKey">32B R/W public key buffer.</param>

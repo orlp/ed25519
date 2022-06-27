@@ -39,3 +39,12 @@ Raphael Beck, the 01st of February, 2022
 * Translated the library into C# 10 managed code
 * Created NuGet package out of it and uploaded it to nuget.org:
 * * https://www.nuget.org/packages/GlitchEd25519
+
+---
+
+Raphael Beck, the 27th of June, 2022
+
+---
+
+* Build XML documentation file for NuGet package
+* Added `KeyExchangeRef10` method for convenience

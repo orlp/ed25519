@@ -26,6 +26,7 @@ public class GlitchEd25519Tests
         Span<byte> signatureRef10 = stackalloc byte[64];
         Span<byte> sharedSecret = stackalloc byte[32];
         Span<byte> sharedSecretCmp = stackalloc byte[32];
+        Span<byte> sharedSecretCmp2 = stackalloc byte[32];
 
         byte[] message = Encoding.UTF8.GetBytes("lorem ipsum dolor sick fuck something something ..");
 
@@ -51,8 +52,10 @@ public class GlitchEd25519Tests
 
         GlitchEd25519.KeyExchange(ref sharedSecret, otherPublicKey, privateKey);
         GlitchEd25519.KeyExchange(ref sharedSecretCmp, publicKey, otherPrivateKey);
+        GlitchEd25519.KeyExchangeRef10(ref sharedSecretCmp2, otherPublicKey, privateKeyRef10);
 
         Assert.Equal(sharedSecret.ToArray(), sharedSecretCmp.ToArray());
+        Assert.Equal(sharedSecret.ToArray(), sharedSecretCmp2.ToArray());
 
         testOutputHelper.WriteLine($"Shared secret: {Convert.ToHexString(sharedSecret).ToLower()}");
     }
@@ -66,7 +69,7 @@ public class GlitchEd25519Tests
 
         Assert.True(GlitchEd25519.Verify(signature, message, publicKey));
     }
-    
+
     [Fact]
     public void LibSodiumWrongPublicKeySignatureInvalid()
     {
