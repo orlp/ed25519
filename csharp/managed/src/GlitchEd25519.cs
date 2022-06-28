@@ -216,7 +216,7 @@ public static partial class GlitchEd25519
         
         KeyExchange(ref outSharedSecret, publicKey, privateKey);
         
-        privateKey.Clear();
+        CryptographicOperations.ZeroMemory(privateKey);
     }
 
     /// <summary>

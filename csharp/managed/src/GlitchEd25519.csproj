@@ -8,7 +8,7 @@
         <LangVersion>10</LangVersion>
         <Title>GlitchEd25519</Title>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>1.0.2.2</PackageVersion>
+        <PackageVersion>1.0.2.3</PackageVersion>
         <Description>A fork of Orson Peters' portable C implementation of Ed25519, a high-speed high-security public-key signature system. Translated from ANSI C into C# 10 by Glitched Polygons.</Description>
         <Copyright>Orson Peters, Raphael Beck</Copyright>
         <PackageLicenseExpression>Zlib</PackageLicenseExpression>
@@ -16,8 +16,8 @@
         <RepositoryUrl>https://github.com/GlitchedPolygons/GlitchEd25519</RepositoryUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>icon.png</PackageIcon>
-        <AssemblyVersion>1.0.2.2</AssemblyVersion>
-        <FileVersion>1.0.2.2</FileVersion>
+        <AssemblyVersion>1.0.2.3</AssemblyVersion>
+        <FileVersion>1.0.2.3</FileVersion>
         <PackageTags>ed25519 orlp lib public private key asymmetric cryptography signing verifying key exchange diffie-hellman</PackageTags>
         <RootNamespace />
     </PropertyGroup>
@@ -28,7 +28,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="icon.png" Pack="true" PackagePath="\"/>
+        <None Include="icon.png" Pack="true" PackagePath="\" />
         <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 </Project>
