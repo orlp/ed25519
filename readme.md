@@ -53,6 +53,11 @@ unsigned char scalar[32];
 unsigned char shared_secret[32];
 ```
 
+**Note:** this library stores private keys in a different format than some other
+libraries, notably `libsodium`. They tend to store the concatenation of the `seed`
+and `public_key` as their private key representation. If you wish to be compatible
+with these libraries you must keep the seed around.
+
 API
 ---
 
