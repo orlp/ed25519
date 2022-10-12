@@ -295,16 +295,16 @@ void fe_copy(fe h, const fe f) {
 */
 
 void fe_frombytes(fe h, const unsigned char *s) {
-    int64_t h0 = load_4(s);
-    int64_t h1 = load_3(s + 4) << 6;
-    int64_t h2 = load_3(s + 7) << 5;
-    int64_t h3 = load_3(s + 10) << 3;
-    int64_t h4 = load_3(s + 13) << 2;
-    int64_t h5 = load_4(s + 16);
-    int64_t h6 = load_3(s + 20) << 7;
-    int64_t h7 = load_3(s + 23) << 5;
-    int64_t h8 = load_3(s + 26) << 4;
-    int64_t h9 = (load_3(s + 29) & 8388607) << 2;
+    int64_t h0 = (int64_t) load_4(s);
+    int64_t h1 = (int64_t) (load_3(s + 4) << 6);
+    int64_t h2 = (int64_t) (load_3(s + 7) << 5);
+    int64_t h3 = (int64_t) (load_3(s + 10) << 3);
+    int64_t h4 = (int64_t) (load_3(s + 13) << 2);
+    int64_t h5 = (int64_t) load_4(s + 16);
+    int64_t h6 = (int64_t) (load_3(s + 20) << 7);
+    int64_t h7 = (int64_t) (load_3(s + 23) << 5);
+    int64_t h8 = (int64_t) (load_3(s + 26) << 4);
+    int64_t h9 = (int64_t) ((load_3(s + 29) & 8388607) << 2);
     int64_t carry0;
     int64_t carry1;
     int64_t carry2;
