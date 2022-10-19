@@ -1,0 +1,6 @@
+**/*.DS_Store
+.idea/
+*[Bb]uild*
+!build.sh
+!build.bat
+!build-mingw.sh

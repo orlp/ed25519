@@ -1,0 +1,50 @@
+---
+
+Raphael Beck, the 9th of October, 2020
+
+---
+
+As per the Zlib license used by this project, here are the changes
+that I've applied, in order of importance/relevance:
+
+* Added “ORLP_” prefix to declspec macro (to prevent possible collisions with other libraries making use of the same name).
+* Added CMakeLists.txt and build.sh for easy packaging and inclusion into other projects.
+* Added fix from orlp/ed25519 pull request #15: https://github.com/orlp/ed25519/pull/15
+* Added fix from orlp/ed25519 issue #10: https://github.com/orlp/ed25519/issues/10
+* Deleted .dll files inside repo.
+* Adapted readme.md accordingly.
+* Implemented C# wrapper class.
+* Added this CHANGELOG file.
+
+---
+
+Raphael Beck, the 19th of January, 2022
+
+---
+
+* Added `.appveyor.yml`
+* Added build and test shell scripts (both for Windows and Linux/Mac)
+* Added feature flag to `CMakeLists.txt` for preventing potentially unnecessary `NULL`-checks
+* Reformatted src code files (using a .clang-format file)
+* * Aesthetic reasons only
+* Simplified verify function a little bit
+* * Rearranged the boolean logic parts to slightly reduce branching
+
+---
+
+Raphael Beck, the 01st of February, 2022
+
+---
+
+* Translated the library into C# 10 managed code
+* Created NuGet package out of it and uploaded it to nuget.org:
+* * https://www.nuget.org/packages/GlitchEd25519
+
+---
+
+Raphael Beck, the 27th of June, 2022
+
+---
+
+* Build XML documentation file for NuGet package
+* Added `KeyExchangeRef10` method for convenience
