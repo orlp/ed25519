@@ -1,6 +1,5 @@
-#include "ge.h"
-#include "precomp_data.h"
-
+#include "../include/ge.h"
+#include "../include/precomp_data.h"
 
 /*
 r = p + q

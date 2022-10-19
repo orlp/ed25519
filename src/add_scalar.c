@@ -1,8 +1,7 @@
-#include "ed25519.h"
-#include "ge.h"
-#include "sc.h"
-#include "sha512.h"
-
+#include "../include/ed25519.h"
+#include "../include/ge.h"
+#include "../include/sc.h"
+#include "../include/sha512.h"
 
 /* see http://crypto.stackexchange.com/a/6215/4697 */
 void ed25519_add_scalar(unsigned char *public_key, unsigned char *private_key, const unsigned char *scalar) {
