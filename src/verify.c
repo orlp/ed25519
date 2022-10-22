@@ -44,18 +44,21 @@ static int consttime_equal(const unsigned char *x, const unsigned char *y) {
     return !r;
 }
 
-int ed25519_verify(const unsigned char *signature, const unsigned char *message, size_t message_len, const unsigned char *public_key) {
+int ed25519_verify(const unsigned char *signature, const unsigned char *message, size_t message_len, const unsigned char *public_key)
+{
     unsigned char h[64];
     unsigned char checker[32];
     sha512_context hash;
     ge_p3 A;
     ge_p2 R;
 
-    if (signature[63] & 224) {
+    if (signature[63] & 224)
+    {
         return 0;
     }
 
-    if (ge_frombytes_negate_vartime(&A, public_key) != 0) {
+    if (ge_frombytes_negate_vartime(&A, public_key) != 0)
+    {
         return 0;
     }
 
@@ -64,14 +67,71 @@ int ed25519_verify(const unsigned char *signature, const unsigned char *message,
     sha512_update(&hash, public_key, 32);
     sha512_update(&hash, message, message_len);
     sha512_final(&hash, h);
-    
+
     sc_reduce(h);
     ge_double_scalarmult_vartime(&R, h, &A, signature + 32);
     ge_tobytes(checker, &R);
 
-    if (!consttime_equal(checker, signature)) {
+    if (!consttime_equal(checker, signature))
+    {
         return 0;
     }
 
     return 1;
+}
+
+void ed25519_verify_init(verify_context *ver_status, const unsigned char *signature, const unsigned char *public_key)
+{
+    ver_status->bool_number = 1;
+    ver_status->sig = signature;
+    if (signature[63] & 224)
+    {
+        ver_status->bool_number = 0;
+    }
+
+    if (ge_frombytes_negate_vartime(&ver_status->A, public_key) != 0)
+    {
+        ver_status->bool_number = 0;
+    }
+
+    sha512_init(&ver_status->hash_ct);
+    sha512_update(&ver_status->hash_ct, signature, 32);
+    sha512_update(&ver_status->hash_ct, public_key, 32);
+}
+
+void ed25519_verify_update(verify_context *ver_status, const unsigned char *message_block, size_t block_len)
+{
+    if (ver_status->bool_number)
+    {
+        sha512_update(&ver_status->hash_ct, message_block, block_len);
+    }
+}
+
+int ed25519_verify_final(verify_context *ver_status)
+{
+    unsigned char h[64];
+    unsigned char checker[32];
+    ge_p2 R;
+
+    if (ver_status->bool_number)
+    {
+        sha512_final(&ver_status->hash_ct, h);
+
+        sc_reduce(h);
+        ge_double_scalarmult_vartime(&R, h, &ver_status->A, ver_status->sig + 32);
+        ge_tobytes(checker, &R);
+
+        if (!consttime_equal(checker, ver_status->sig))
+        {
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+    else
+    {
+        return 0;
+    }
 }
